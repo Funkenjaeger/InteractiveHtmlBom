@@ -43,7 +43,10 @@ def check_for_bom_button():
             top_tb.Realize()
 
 
-if not os.environ.get('INTERACTIVE_HTML_BOM_CLI_MODE', False):
+if os.environ.get('INTERACTIVE_HTML_BOM_CLI_MODE', False):
+    from InteractiveHtmlBom.generate_interactive_bom \
+        import generate_interactive_bom
+else:
     from .ecad.kicad import InteractiveHtmlBomPlugin
 
     plugin = InteractiveHtmlBomPlugin()

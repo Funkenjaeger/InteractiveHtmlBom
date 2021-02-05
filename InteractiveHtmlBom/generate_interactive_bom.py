@@ -14,7 +14,7 @@ def to_utf(s):
         return s
 
 
-if __name__ == "__main__":
+def generate_interactive_bom(args=None):
     # Add ../ to the path
     # Works if this script is executed without installing the module
     script_dir = os.path.dirname(os.path.abspath(os.path.realpath(__file__)))
@@ -29,11 +29,6 @@ if __name__ == "__main__":
     from InteractiveHtmlBom.errors import (ExitCodes, ParsingException,
                                           exit_error)
 
-    create_wx_app = 'INTERACTIVE_HTML_BOM_NO_DISPLAY' not in os.environ
-    if create_wx_app:
-        import wx
-        app = wx.App()
-
     parser = argparse.ArgumentParser(
             description='KiCad InteractiveHtmlBom plugin CLI.',
             formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -42,7 +37,13 @@ if __name__ == "__main__":
                         help="KiCad PCB file")
     config = Config(version)
     config.add_options(parser, config.FILE_NAME_FORMAT_HINT)
-    args = parser.parse_args()
+    args = parser.parse_args(args)
+
+    create_wx_app = 'INTERACTIVE_HTML_BOM_NO_DISPLAY' not in os.environ
+    if create_wx_app:
+        import wx
+        app = wx.App()
+
     logger = ibom.Logger(cli=True)
     if not os.path.isfile(args.file):
         exit_error(logger, ExitCodes.ERROR_FILE_NOT_FOUND,
@@ -63,3 +64,7 @@ if __name__ == "__main__":
             ibom.main(parser, config, logger)
         except ParsingException as e:
             exit_error(logger, ExitCodes.ERROR_PARSE, str(e))
+
+
+if __name__ == "__main__":
+    generate_interactive_bom()

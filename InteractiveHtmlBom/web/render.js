@@ -654,27 +654,23 @@ function pointWithinDistanceToArc(x, y, xc, yc, radius, startangle, endangle, d)
   if (r_sq < rmin * rmin || r_sq > rmax * rmax)
     return false;
 
-  var angle1 = modulo(startangle * Math.PI / 180, 2 * Math.PI);
-  var x1 = xc + radius * Math.cos(angle1);
-  var y1 = yc - radius * Math.sin(angle1);
-  var dx1 = x1 - x;
-  var dy1 = y1 - y;
-  if (dx1 * dx1 + dy1 * dy1 <= d * d )
+  var angle1 = modulo(deg2rad(startangle), 2 * Math.PI);
+  var dx1 = xc + radius * Math.cos(angle1) - x;
+  var dy1 = yc + radius * Math.sin(angle1) - y;
+  if (dx1 * dx1 + dy1 * dy1 <= d * d)
     return true;
 
-  var angle2 = modulo(endangle * Math.PI / 180, 2 * Math.PI);
-  var x2 = xc + radius * Math.cos(angle2);
-  var y2 = yc - radius * Math.sin(angle2);
-  var dx2 = x2 - x;
-  var dy2 = y2 - y;
-  if (dx2 * dx2 + dy2 * dy2 <= d * d )
+  var angle2 = modulo(deg2rad(endangle), 2 * Math.PI);
+  var dx2 = xc + radius * Math.cos(angle2) - x;
+  var dy2 = yc + radius * Math.sin(angle2) - y;
+  if (dx2 * dx2 + dy2 * dy2 <= d * d)
     return true;
 
   var angle = modulo(Math.atan2(dy, dx), 2 * Math.PI);
   if (angle1 > angle2)
     return (angle >= angle2 || angle <= angle1);
   else
-    return (angle >= angle1 && angle <= angle2 );
+    return (angle >= angle1 && angle <= angle2);
 }
 
 function pointWithinPad(x, y, pad) {
